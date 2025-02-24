@@ -1,9 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SimpleBookingApp.Application.Common.Concretes.EmailManager;
-using SimpleBookingApp.Application.Validators.Booking;
+using SimpleBookingApp.Application.Features.Bookings.CreateBooking.Commands.CreateBooking;
 using System.Reflection;
 
 namespace SimpleBookingApp.Application

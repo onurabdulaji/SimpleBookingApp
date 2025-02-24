@@ -12,8 +12,8 @@ using SimpleBookingApp.Persistence.Context;
 namespace SimpleBookingApp.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250223131231_Initial_Migration_Up_DB")]
-    partial class Initial_Migration_Up_DB
+    [Migration("20250223235007_Mig_Initial")]
+    partial class Mig_Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

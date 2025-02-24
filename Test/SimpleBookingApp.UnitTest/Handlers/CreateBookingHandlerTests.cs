@@ -1,8 +1,7 @@
 ﻿using FluentValidation;
 using Moq;
 using SimpleBookingApp.Application.Common.Abstracts.EmailService;
-using SimpleBookingApp.Application.Features.Bookings.Commands;
-using SimpleBookingApp.Application.Features.Bookings.Handlers;
+using SimpleBookingApp.Application.Features.Bookings.CreateBooking.Commands.CreateBooking;
 using SimpleBookingApp.Application.Interfaces;
 using SimpleBookingApp.Domain.Entities;
 
@@ -13,21 +12,20 @@ namespace SimpleBookingApp.UnitTest.Handlers
         private readonly Mock<IBookingRepository> _mockBookingRepository;
         private readonly Mock<IEmailService> _mockEmailService;
         private readonly Mock<IValidator<CreateBookingCommand>> _mockValidator;
-        private readonly CreateBookingHandler _handler;
+        private readonly CreateBookingCommandHandler _handler;
 
         public CreateBookingHandlerTests()
         {
+            _mockValidator = new Mock<IValidator<CreateBookingCommand>>();
             _mockBookingRepository = new Mock<IBookingRepository>();
             _mockEmailService = new Mock<IEmailService>();
-            _mockValidator = new Mock<IValidator<CreateBookingCommand>>();
 
-            _handler = new CreateBookingHandler(
-            _mockBookingRepository.Object,  // 1. Repository
-            _mockEmailService.Object,       // 2. EmailService
-            _mockValidator.Object           // 3. Validator (Doğru sırada!)
+            _handler = new CreateBookingCommandHandler(
+                _mockValidator.Object,         // Validator
+                _mockBookingRepository.Object, // Repository
+                _mockEmailService.Object    // EmailService
             );
         }
-
         [Fact]
         public async Task Handle_ShouldCreateBooking_WhenBookingIsValid()
         {
@@ -45,7 +43,7 @@ namespace SimpleBookingApp.UnitTest.Handlers
                 .ReturnsAsync(new FluentValidation.Results.ValidationResult());
 
             // Kaynağın uygun olduğunu varsayıyoruz
-            _mockBookingRepository.Setup(r => r.IsResourceAvailableAsync(It.IsAny<int>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<int>()))
+            _mockBookingRepository.Setup(r => r.IsBookingConflictAsync(It.IsAny<int>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<int>()))
                 .ReturnsAsync(true);
 
             // Booking nesnesinin ID'sini set etmek için Callback ekliyoruz
@@ -61,10 +59,12 @@ namespace SimpleBookingApp.UnitTest.Handlers
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.NotEqual(0, result);  // Booking ID sıfırdan farklı olmalı (başarıyla oluşturuldu)
+            Assert.NotEqual(0, result.BookingId); // Booking ID sıfırdan farklı olmalı
             _mockBookingRepository.Verify(r => r.AddAsync(It.IsAny<Booking>()), Times.Once);  // AddAsync yalnızca bir kez çağrılmalı
             _mockEmailService.Verify(e => e.SendBookingConfirmationConsoleEmailAsync(It.IsAny<int>()), Times.Once);  // E-posta gönderimi yapılmalı
         }
+
+
         [Fact]
         public async Task Handle_ShouldThrowValidationException_WhenBookingIsInvalid()
         {
@@ -103,11 +103,10 @@ namespace SimpleBookingApp.UnitTest.Handlers
             _mockValidator.Setup(v => v.ValidateAsync(command, It.IsAny<CancellationToken>())).ReturnsAsync(new FluentValidation.Results.ValidationResult());
 
             // Kaynağın uygun olmadığı varsayıldı
-            _mockBookingRepository.Setup(r => r.IsResourceAvailableAsync(It.IsAny<int>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<int>())).ReturnsAsync(false);
+            _mockBookingRepository.Setup(r => r.IsBookingConflictAsync(It.IsAny<int>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<int>())).ReturnsAsync(false);
 
             // Act & Assert
             await Assert.ThrowsAsync<ValidationException>(() => _handler.Handle(command, CancellationToken.None));
         }
     }
 }
-

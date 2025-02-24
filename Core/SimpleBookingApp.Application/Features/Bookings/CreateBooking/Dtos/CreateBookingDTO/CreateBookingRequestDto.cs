@@ -1,13 +1,12 @@
-﻿using MediatR;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimpleBookingApp.Application.Features.Bookings.Commands
+namespace SimpleBookingApp.Application.Features.Bookings.CreateBooking.Dtos.CreateBookingDTO
 {
-    public class CreateBookingCommand : IRequest<int>
+    public class CreateBookingRequestDto
     {
         public int ResourceId { get; set; }
         public DateTime DateFrom { get; set; }

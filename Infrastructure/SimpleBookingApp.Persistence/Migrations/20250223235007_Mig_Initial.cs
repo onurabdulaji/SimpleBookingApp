@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SimpleBookingApp.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial_Migration_Up_DB : Migration
+    public partial class Mig_Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

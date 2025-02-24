@@ -1,5 +1,4 @@
-﻿using MailKit.Net.Smtp;
-using MimeKit;
+﻿
 using SimpleBookingApp.Application.Common.Abstracts.EmailService;
 
 namespace SimpleBookingApp.Application.Common.Concretes.EmailManager

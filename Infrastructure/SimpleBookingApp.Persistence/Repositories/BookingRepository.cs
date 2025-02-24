@@ -47,7 +47,7 @@ namespace SimpleBookingApp.Persistence.Repositories
                 .ToListAsync();
         }
 
-        public async Task<bool> IsResourceAvailableAsync(int resourceId, DateTime startTime, DateTime endTime, int requestedQuantity)
+        public async Task<bool> IsBookingConflictAsync(int resourceId, DateTime startTime, DateTime endTime, int requestedQuantity)
         {
             // Kaynağın mevcut kapasitesini alın
             var resource = await _context.Resources.FindAsync(resourceId);
@@ -76,5 +76,6 @@ namespace SimpleBookingApp.Persistence.Repositories
             // Eğer kapasite yetersizse, false döndürme
             return true;
         }
+
     }
 }

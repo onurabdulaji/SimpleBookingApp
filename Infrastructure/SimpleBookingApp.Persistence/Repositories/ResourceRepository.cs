@@ -3,7 +3,6 @@ using SimpleBookingApp.Application.Interfaces;
 using SimpleBookingApp.Domain.Entities;
 using SimpleBookingApp.Persistence.Context;
 
-
 namespace SimpleBookingApp.Persistence.Repositories
 {
     public class ResourceRepository : IResourceRepository

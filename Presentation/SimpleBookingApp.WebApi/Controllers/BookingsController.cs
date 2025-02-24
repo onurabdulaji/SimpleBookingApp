@@ -1,7 +1,8 @@
-﻿using FluentValidation;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SimpleBookingApp.Application.Features.Bookings.Commands;
+using SimpleBookingApp.Application.Features.Bookings.CreateBooking.Commands.CreateBooking;
+using SimpleBookingApp.Application.Features.Bookings.GetBookings.Commands;
+using SimpleBookingApp.Domain.Entities;
 
 namespace SimpleBookingApp.WebApi.Controllers
 {
@@ -16,27 +17,20 @@ namespace SimpleBookingApp.WebApi.Controllers
             _mediator = mediator;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetBookings()
+        {
+            var result = await _mediator.Send(new GetBookingsListQuery());
+            return Ok(result);
+        }
+
         [HttpPost("CreateBooking")]
         public async Task<IActionResult> CreateBooking([FromBody] CreateBookingCommand command)
         {
-            try
-            {
-                var result = await _mediator.Send(command);
-                return Ok(new { BookingId = result, Message = "Booking successfully created." });
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(new { Message = "Validation failed", Errors = ex.Errors.Select(e => e.ErrorMessage) });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { Message = "An error occurred while processing your request", Error = ex.Message });
-            }
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
     }
 }
 
 
-
-//RESTful API
-//return CreatedAtAction(nameof(GetBooking), new { id = result }, new { BookingId = result, Message = "Booking successfully created." });

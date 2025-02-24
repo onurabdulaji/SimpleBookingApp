@@ -15,7 +15,7 @@ namespace SimpleBookingApp.Application.Interfaces
         Task UpdateAsync(Booking booking);
         Task DeleteAsync(Booking booking);
         Task<IEnumerable<Booking>> GetBookingsByResourceIdAsync(int resourceId);
-        Task<bool> IsResourceAvailableAsync(int resourceId, DateTime startTime, DateTime endTime, int requestedQuantity);
+        Task<bool> IsBookingConflictAsync(int resourceId, DateTime startTime, DateTime endTime, int requestedQuantity);
 
     }
 }

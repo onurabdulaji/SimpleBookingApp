@@ -1,12 +1,11 @@
 ﻿using FluentValidation;
-using SimpleBookingApp.Application.Features.Bookings.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimpleBookingApp.Application.Validators.Booking
+namespace SimpleBookingApp.Application.Features.Bookings.CreateBooking.Commands.CreateBooking
 {
     public class CreateBookingCommandValidator : AbstractValidator<CreateBookingCommand>
     {
@@ -24,6 +23,9 @@ namespace SimpleBookingApp.Application.Validators.Booking
 
             RuleFor(x => x.DateTo)
                 .GreaterThan(DateTime.UtcNow).WithMessage("End time must be in the future.");
+
         }
     }
 }
+
+

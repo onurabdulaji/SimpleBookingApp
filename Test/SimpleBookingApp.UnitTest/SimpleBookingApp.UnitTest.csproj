@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\SimpleBookingApp.Application\SimpleBookingApp.Application.csproj" />
+    <ProjectReference Include="..\..\Core\SimpleBookingApp.Domain\SimpleBookingApp.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
